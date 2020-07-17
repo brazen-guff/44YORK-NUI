@@ -6,7 +6,6 @@
 		console.log("::LOADING 44YORK CUSTOM::");
 
 		var app = angular.module('viewCustom', ['angularLoad', 'reportProblem', 'googleAnalytics']).run (function($rootScope){
-			//$rootScope.name = 'userID';
 		});;
 		
 	
@@ -65,22 +64,23 @@
 		app.controller('prmUserAreaExpandableAfterController', function ($scope, $rootScope) {
 		    $rootScope.name = this.parentCtrl.userSessionManagerService.getUserName();
 		 });
-		 
 		
 		app.component('prmUserAreaExpandableAfter', {
 			bindings: { parentCtrl: '<' },
 			controller: 'prmUserAreaExpandableAfterController'
 		});
+		
 
-				
+
 
 		app.component('prmChaptersResultsLineAfter', {
 			bindings: { parentCtrl: '<',
 				buttonText: '@',
 				buttonLink: '@',
-				formURL: '@' },
+				formURL: '@' ,
+				Requestable: '@'},
 			controller: 'prmChaptersResultsLineAfterController',
-			template: '\n <div ngIf="$ctrl.ShowReqLink" class="bar filter-bar layout-align-center-center layout-row margin-top-medium" layout="row" layout-align="center center">\n          <span class="margin-right-small">{{$ctrl.buttonText}}</span>\n          <a ng-href="{{$ctrl.formURL}}" target="_blank">\n              <button class="button-with-icon zero-margin md-button md-button-raised md-primoExplore-theme" type="button" aria-label={{$ctrl.buttonText}} style="color: #00546E;">\n                  <prm-icon icon-type="svg" svg-icon-set="action" icon-definition="ic_description_24px"></prm-icon>\n                  <span style="text-transform: none;">{{$ctrl.serviceText}}</span>\n              </button>\n          </a>\n      </div>'
+			template: '\n <div ng-If="$ctrl.ShowReqLink && $ctrl.Requestable" class="bar filter-bar layout-align-center-center layout-row margin-top-medium" layout="row" layout-align="center center">\n          <span class="margin-right-small">{{$ctrl.buttonText}}</span>\n          <a ng-href="{{$ctrl.formURL}}" target="_blank">\n              <button class="button-with-icon zero-margin md-button md-button-raised md-primoExplore-theme" type="button" aria-label={{$ctrl.buttonText}} style="color: #00546E;">\n                  <prm-icon icon-type="svg" svg-icon-set="action" icon-definition="ic_description_24px"></prm-icon>\n                  <span style="text-transform: none;">{{$ctrl.serviceText}}</span>\n              </button>\n          </a>\n      </div>'
 
 		});
 
@@ -89,61 +89,82 @@
 			//test whether item is available in physical form - any electronic delcategory means that 
 			//the request link shouldn't appear
 			//also, determinine whether user logged in, if they are the following will return null
+			//exclude KM/YML/Rare Books etc.
 
 			$scope.userID = $rootScope.name;
 			
-		
 			var vm = this;
-
+			
+			console.log('************************');
+			
+			console.log(this);
+			
 			var elementExists = document.getElementById("signInBtn");
 			var conditions = ["Alma-E", "Remote Search Resource", "Alma-D", "Online Resource"];
 
 			var delcat = conditions.some(function (el) {
 				return vm.parentCtrl.item.delivery.deliveryCategory.includes(el);
 			});
-
-			if (!elementExists) {
-				//user logged in
-				this.buttonText = 'Request this physical item';
-				//gather information for google form
-				var rec_id = this.parentCtrl.item.pnx.control.sourcerecordid;
-
-				var title = encodeURIComponent(this.parentCtrl.item.pnx.display.title[0]);
-				//entry.1752528148=Title
-
-				var author = encodeURIComponent(this.parentCtrl.item.pnx.display.creator);
-				//&entry.1866861278=Author
-
-				var material_type = encodeURIComponent(this.parentCtrl.item.pnx.addata.format);
-				//&entry.1859840384=Material+type
-
-				var pub_year = encodeURIComponent(this.parentCtrl.item.pnx.addata.risdate[0]);
-
-				var loc = encodeURIComponent(this.parentCtrl.item.delivery.bestlocation.mainLocation) + ' ' + encodeURIComponent(this.parentCtrl.item.delivery.bestlocation.subLocation);
-				
-				var shelfmark = this.parentCtrl.item.delivery.bestlocation.callNumber;
-				//&entry.1777930827=Shelfmark
-				shelfmark = encodeURIComponent(shelfmark.replace('&nbsp;&nbsp;', ''));
-
-				var plcholder = 'Please complete';
-				
-				var userID = $scope.userID;
-		
-				var formURL = '';
-
-				this.serviceText = 'Use our Book Takeaway Service';
-
-				this.formURL ='https://docs.google.com/forms/d/e/1FAIpQLScm2fmPXpqeFDf2wUMZNkTLakZ_nI6sJWwstHSS7l3fu_inLw/viewform?entry.34625858=&entry.1752528148=' + title + '&entry.301156700=' + 
-				'&entry.97733718=' + author + '&entry.165289220=' + pub_year + '&entry.1078294971=&entry.2086517750=' + material_type + '&entry.1347329161=' + loc + '&entry.2093632974=' + shelfmark +  '&entry.435363005=' + userID + '&entry.1924359520=' + rec_id;
 			
-			} else {
-				this.buttonText = 'PLEASE LOG IN TO REQUEST';
-				this.formURL = '';
-				this.serviceText = '';
-			}
-			this.ShowReqLink = Boolean(delcat == false);
+			//array of locations which should not be requestable
+			//need to determine whether we are in overlay mode. If we are, the path to the subLocation will be different - $ctrl.isFullViewOverlayOpen
+			//also, consider items with multiple holdings parentCtrl.delivery.holding[]
+			
+			
+			if (!delcat){
+				var loc_conditions = [/*RARE BOOKS*/ "CA","COP","DY","DYQ","EL","ELQ","ELTSC","HA","HAQ","HC","HCF","HCQ","HSO","KIL","KILF","KILQ","KMGSC","KMSC","KMSCF","MI","MIF","MIQ","MWA","MWAQ","MWH","NRT","PET","PSSC","RBLMC","RBY","RBYF","SBT","SC","SCF","SCP","SCPF","SCQ","SL","SLQ","SM","SMF","SMQ","SOF","TM","TM (KML)","TOY","TP","TPF","VK","VKQ","VW","YAG","YMS","YMSF","YMSP","YR","YRF","YRQ", /*KM */ "BCM","KM","KMA","KMAQ","KMAT","KMD","KMF","KMFULOHD","KMIAAS","KMIAASF","KMIAASQ","KMMFC","KMMFL","KMP","KMPAM","KMQ","KMQULOHD","KMREF","KMRQ","KMSL","KMT","KMULOHD","KMX","WO","WOF","WOJ","WOPA","WOQ",/*YML*/"AR","CO","EBEL","EDM","ESC","FM","FPAM","H","HF","HPAM","HS","HSF","HSQ","L","LS","LSP","OHOB","OI","OL","OPAM","OPL","PAM","RR","RRF","RRPAM","SCCA","SCCC","SCCCW","SCCN","SCCPL","SCCPR","SCCSS","SCF","SCFL","SCM","SCY","SCYF","SCYFP","SCYPA","SGP","SLA","TEMP","UNASSIGNED","USBIB","USPM","YM", /*OS Store*/"ASC","BK1","BKQ1","EXMC","GP","NRP","NRQ","P","P2","P3","P4","P5","ASC","BK1","BKQ1","FSBK","FSBKQ","NRP"];
+				var rqst = loc_conditions.some(function (ela) {
+					//going to need to determiine page mode here
+					return vm.parentCtrl.item.delivery.bestlocation.subLocationCode.includes(ela);
+				});
+			};
+			
+			if (!elementExists) {	
+				if (!delcat){
+					//user logged in
+					this.buttonText = 'Request this physical item';
+					//gather information for google form
+					var rec_id = this.parentCtrl.item.pnx.control.sourcerecordid[0];
 
-		});
+					
+					var title = encodeURIComponent(this.parentCtrl.item.pnx.display.title[0]);
+					//entry.1752528148=Title
+
+					var author = encodeURIComponent(this.parentCtrl.item.pnx.display.creator);
+					//&entry.1866861278=Author
+
+					var material_type = encodeURIComponent(this.parentCtrl.item.pnx.addata.format);
+					//&entry.1859840384=Material+type
+
+					var pub_year = encodeURIComponent(this.parentCtrl.item.pnx.addata.risdate[0]);
+
+						var loc = encodeURIComponent(this.parentCtrl.item.delivery.bestlocation.mainLocation) + ' ' + encodeURIComponent(this.parentCtrl.item.delivery.bestlocation.subLocation);
+
+					var shelfmark = this.parentCtrl.item.delivery.bestlocation.callNumber;
+					//&entry.1777930827=Shelfmark
+					shelfmark = encodeURIComponent(shelfmark.replace('&nbsp;&nbsp;', ''));
+
+					var userID = $scope.userID;
+			
+					var formURL = '';
+
+					this.serviceText = 'Use our Book Takeaway Service';
+					
+				
+					this.formURL ='https://docs.google.com/forms/d/e/1FAIpQLScm2fmPXpqeFDf2wUMZNkTLakZ_nI6sJWwstHSS7l3fu_inLw/viewform?entry.34625858=&entry.1752528148=' + title + '&entry.301156700=' + 
+					'&entry.97733718=' + author + '&entry.165289220=' + pub_year + '&entry.1078294971=&entry.2086517750=' + material_type + '&entry.1347329161=' + loc + '&entry.2093632974=' + shelfmark +  '&entry.435363005=' + userID + '&entry.1924359520=' + rec_id;
+				
+				} else {
+					this.buttonText = 'PLEASE LOG IN TO REQUEST';
+					this.formURL = '';
+					this.serviceText = '';
+				}
+				
+			
+			this.ShowReqLink = Boolean(delcat == false);	
+			this.Requestable = Boolean(rqst == false);
+
+		}});
 
 		/*********************************************************/
 		
