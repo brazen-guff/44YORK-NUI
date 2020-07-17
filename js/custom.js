@@ -110,14 +110,14 @@
 					return vm.parentCtrl.result.delivery.deliveryCategory.includes(el);
 				});
 			
+				console.log(vm);
 				
 				if (!delcat){
 					//array of locations which should not be requestable	
-					var loc_conditions = [/*RARE BOOKS*/ "CA","COP","DY","DYQ","EL","ELQ","ELTSC","HA","HAQ","HC","HCF","HCQ","HSO","KIL","KILF","KILQ","KMGSC","KMSC","KMSCF","MI","MIF","MIQ","MWA","MWAQ","MWH","NRT","PET","PSSC","RBLMC","RBY","RBYF","SBT","SC","SCF","SCP","SCPF","SCQ","SL","SLQ","SM","SMF","SMQ","SOF","TM","TM (KML)","TOY","TP","TPF","VK","VKQ","VW","YAG","YMS","YMSF","YMSP","YR","YRF","YRQ", /*KM */ "BCM","KM","KMA","KMAQ","KMAT","KMD","KMF","KMFULOHD","KMIAAS","KMIAASF","KMIAASQ","KMMFC","KMMFL","KMP","KMPAM","KMQ","KMQULOHD","KMREF","KMRQ","KMSL","KMT","KMULOHD","KMX","WO","WOF","WOJ","WOPA","WOQ",/*YML*/"AR","CO","EBEL","EDM","ESC","FM","FPAM","H","HF","HPAM","HS","HSF","HSQ","L","LS","LSP","OHOB","OI","OL","OPAM","OPL","PAM","RR","RRF","RRPAM","SCCA","SCCC","SCCCW","SCCN","SCCPL","SCCPR","SCCSS","SCF","SCFL","SCM","SCY","SCYF","SCYFP","SCYPA","SGP","SLA","TEMP","UNASSIGNED","USBIB","USPM","YM", /*OS Store*/"ASC","BK1","BKQ1","EXMC","GP","NRP","NRQ","P","P2","P3","P4","P5","ASC","BK1","BKQ1","FSBK","FSBKQ","NRP"];
+					var loc_conditions = [/*RARE BOOKS*/ "CA","COP","DY","DYQ","EL","ELQ","ELTSC","HA","HAQ","HC","HCF","HCQ","HSO","KIL","KILF","KILQ","KMGSC","KMSC","KMSCF","MI","MIF","MIQ","MWA","MWAQ","MWH","NRT","PET","PSSC","RBLMC","RBY","RBYF","SBT","SC","SCF","SCP","SCPF","SCQ","SL","SLQ","SM","SMF","SMQ","SOF","TM","TM (KML)","TOY","TP","TPF","VK","VKQ","VW","YAG","YMS","YMSF","YMSP","YR","YRF","YRQ", /*KM */ "BCM","KM","KMA","KMAQ","KMAT","KMD","KMF","KMFULOHD","KMIAAS","KMIAASF","KMIAASQ","KMMFC","KMMFL","KMP","KMPAM","KMQ","KMQULOHD","KMREF","KMRQ","KMSL","KMT","KMULOHD","KMX","WO","WOF","WOJ","WOPA","WOQ",/*YML*/"AR","CO","EBEL","EDM","ESC","FM","FPAM","H","HF","HPAM","HS","HSF","HSQ","L","LS","LSP","OHOB","OI","OL","OPAM","OPL","PAM","RR","RRF","RRPAM","SCCA","SCCC","SCCCW","SCCN","SCCPL","SCCPR","SCCSS","SCF","SCFL","SCM","SCY","SCYF","SCYFP","SCYPA","SGP","SLA","TEMP","UNASSIGNED","USBIB","USPM","YM", /*OS Store*/"ASC","BK1","BKQ1","EXMC","GP","NRP","NRQ","P","P2","P3","P4","P5","ASC","BK1","BKQ1","FSBK","FSBKQ","NRP", /*Borthwick*/"BIHMF","BIMF","BIMG","BISL","BISL","BISLS","BISR","BISRS","BISTR","BIUA"];
 					
-					var subLoc = vm.parentCtrl.result.delivery.bestlocation.subLocationCode;
-						console.log(subLoc);
-						
+					var subLoc = vm.parentCtrl.result.delivery.bestlocation.subLocationCode;	
+					//is our current sub location in the non-requestable list?
 					var rqst = loc_conditions.indexOf(subLoc);
 				};
 				
@@ -125,55 +125,55 @@
 					if (!delcat){
 						//user logged in
 						vm.buttonText = 'Request this physical item';
-						
-						console.log(vm);
-						
+											
 						//gather information for google form
 						
 						if (vm.displayMode){ //overlay
-						
-							console.log('****************overlay***************');
-						
+											
 							var rec_id = vm.parentCtrl.result.pnx.control.sourcerecordid[0];
 																	
-							var title = encodeURIComponent(this.parentCtrl.result.pnx.display.title[0]);
+							var title = encodeURIComponent(vm.parentCtrl.result.pnx.display.title[0]);
 							//entry.1752528148=Title
 
-							var author = encodeURIComponent(this.parentCtrl.result.pnx.display.creator);
+							var author = encodeURIComponent(vm.parentCtrl.result.pnx.display.creator);
 							//&entry.1866861278=Author
 
-							var material_type = encodeURIComponent(this.parentCtrl.result.pnx.addata.format);
+							var material_type = encodeURIComponent(vm.parentCtrl.result.pnx.addata.format);
 							//&entry.1859840384=Material+type
 
-							var pub_year = encodeURIComponent(this.parentCtrl.result.pnx.addata.risdate[0]);
+							if (vm.parentCtrl.result.pnx.addata.hasOwnProperty('risdate')){
+								var pub_year = encodeURIComponent(vm.parentCtrl.result.pnx.addata.risdate[0]);
+							}
 
-							var loc = encodeURIComponent(this.parentCtrl.result.delivery.bestlocation.mainLocation) + ' ' + encodeURIComponent(this.parentCtrl.result.delivery.bestlocation.subLocation);
+							var loc = encodeURIComponent(vm.parentCtrl.result.delivery.bestlocation.mainLocation) + ' ' + encodeURIComponent(vm.parentCtrl.result.delivery.bestlocation.subLocation);
 
-							var shelfmark = this.parentCtrl.result.delivery.bestlocation.callNumber;
+							var shelfmark = vm.parentCtrl.result.delivery.bestlocation.callNumber;
 							//&entry.1777930827=Shelfmark
 							shelfmark = encodeURIComponent(shelfmark.replace('&nbsp;&nbsp;', ''));
 						}else{
 						//not in overlay	
-							
-							console.log('****************not in overlay***************');
-							
+														
 							var rec_id = vm.parentCtrl.result.pnx.control.sourcerecordid[0];
 							
 											
-							var title = encodeURIComponent(this.parentCtrl.result.pnx.display.title[0]);
+							var title = encodeURIComponent(vm.parentCtrl.result.pnx.display.title[0]);
 							//entry.1752528148=Title
 
-							var author = encodeURIComponent(this.parentCtrl.result.pnx.display.creator);
+							var author = encodeURIComponent(vm.parentCtrl.result.pnx.display.creator);
 							//&entry.1866861278=Author
 
-							var material_type = encodeURIComponent(this.parentCtrl.result.pnx.addata.format);
+							var material_type = encodeURIComponent(vm.parentCtrl.result.pnx.addata.format);
 							//&entry.1859840384=Material+type
 
-							var pub_year = encodeURIComponent(this.parentCtrl.result.pnx.addata.risdate[0]);
+							//journal records might not have this field
+							
+							if (vm.parentCtrl.result.pnx.addata.hasOwnProperty('risdate')){
+								var pub_year = encodeURIComponent(vm.parentCtrl.result.pnx.addata.risdate[0]);
+							}
+							
+							var loc = encodeURIComponent(vm.parentCtrl.result.delivery.bestlocation.mainLocation) + ' ' + encodeURIComponent(vm.parentCtrl.result.delivery.bestlocation.subLocation);
 
-							var loc = encodeURIComponent(this.parentCtrl.result.delivery.bestlocation.mainLocation) + ' ' + encodeURIComponent(this.parentCtrl.result.delivery.bestlocation.subLocation);
-
-							var shelfmark = this.parentCtrl.result.delivery.bestlocation.callNumber;
+							var shelfmark = vm.parentCtrl.result.delivery.bestlocation.callNumber;
 							//&entry.1777930827=Shelfmark
 							shelfmark = encodeURIComponent(shelfmark.replace('&nbsp;&nbsp;', ''));
 							
@@ -183,20 +183,20 @@
 				
 						var formURL = '';
 
-						this.serviceText = 'Use our Book Takeaway Service';
+						vm.serviceText = 'Use our Book Takeaway Service';
 						
 					
-						this.formURL ='https://docs.google.com/forms/d/e/1FAIpQLScm2fmPXpqeFDf2wUMZNkTLakZ_nI6sJWwstHSS7l3fu_inLw/viewform?entry.34625858=&entry.1752528148=' + title + '&entry.301156700=' + 
+						vm.formURL ='https://docs.google.com/forms/d/e/1FAIpQLScm2fmPXpqeFDf2wUMZNkTLakZ_nI6sJWwstHSS7l3fu_inLw/viewform?entry.34625858=&entry.1752528148=' + title + '&entry.301156700=' + 
 						'&entry.97733718=' + author + '&entry.165289220=' + pub_year + '&entry.1078294971=&entry.2086517750=' + material_type + '&entry.1347329161=' + loc + '&entry.2093632974=' + shelfmark +  '&entry.435363005=' + userID + '&entry.1924359520=' + rec_id;
 					
 					} else {
-						this.buttonText = 'PLEASE LOG IN TO REQUEST';
-						this.formURL = '';
-						this.serviceText = '';
+						vm.buttonText = 'PLEASE LOG IN TO REQUEST';
+						vm.formURL = '';
+						vm.serviceText = '';
 					}
 					
 				
-				this.ShowReqLink = Boolean(delcat == false);	
+				vm.ShowReqLink = Boolean(delcat == false);	
 				//additional filter on non-requestable subLocations
 				vm.Requestable = Boolean(rqst == '-1');
 			}
