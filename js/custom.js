@@ -109,16 +109,17 @@
 				var delcat = conditions.some(function (el) {
 					return vm.parentCtrl.result.delivery.deliveryCategory.includes(el);
 				});
-			
-				console.log(vm);
-				
+
 				if (!delcat){
-					//array of locations which should not be requestable	
-					var loc_conditions = [/*RARE BOOKS*/ "CA","COP","DY","DYQ","EL","ELQ","ELTSC","HA","HAQ","HC","HCF","HCQ","HSO","KIL","KILF","KILQ","KMGSC","KMSC","KMSCF","MI","MIF","MIQ","MWA","MWAQ","MWH","NRT","PET","PSSC","RBLMC","RBY","RBYF","SBT","SC","SCF","SCP","SCPF","SCQ","SL","SLQ","SM","SMF","SMQ","SOF","TM","TM (KML)","TOY","TP","TPF","VK","VKQ","VW","YAG","YMS","YMSF","YMSP","YR","YRF","YRQ", /*KM */ "BCM","KM","KMA","KMAQ","KMAT","KMD","KMF","KMFULOHD","KMIAAS","KMIAASF","KMIAASQ","KMMFC","KMMFL","KMP","KMPAM","KMQ","KMQULOHD","KMREF","KMRQ","KMSL","KMT","KMULOHD","KMX","WO","WOF","WOJ","WOPA","WOQ",/*YML*/"AR","CO","EBEL","EDM","ESC","FM","FPAM","H","HF","HPAM","HS","HSF","HSQ","L","LS","LSP","OHOB","OI","OL","OPAM","OPL","PAM","RR","RRF","RRPAM","SCCA","SCCC","SCCCW","SCCN","SCCPL","SCCPR","SCCSS","SCF","SCFL","SCM","SCY","SCYF","SCYFP","SCYPA","SGP","SLA","TEMP","UNASSIGNED","USBIB","USPM","YM", /*OS Store*/"ASC","BK1","BKQ1","EXMC","GP","NRP","NRQ","P","P2","P3","P4","P5","ASC","BK1","BKQ1","FSBK","FSBKQ","NRP", /*Borthwick*/"BIHMF","BIMF","BIMG","BISL","BISL","BISLS","BISR","BISRS","BISTR","BIUA"];
+					//array on non-requestable library codes
+					var libCodes = ["44YORK_RBL_LIB", "44YORK_YML_LIB","44YORK_KM_LIB","44YORK_EXST_LIB","44YORK_EXST-B_LIB","44YORK_BIA_LIB","44YORK_NRM_LIB","44YORK_PET_LIB","44YORK_SOF_LIB","44YORK_ACA_LIB"]		
 					
-					var subLoc = vm.parentCtrl.result.delivery.bestlocation.subLocationCode;	
+					var itemLib = vm.parentCtrl.result.delivery.bestlocation.libraryCode;
+					
+					console.log (vm);
+					
 					//is our current sub location in the non-requestable list?
-					var rqst = loc_conditions.indexOf(subLoc);
+					var rqst = libCodes.indexOf(itemLib);
 				};
 				
 				if (!elementExists) {	
