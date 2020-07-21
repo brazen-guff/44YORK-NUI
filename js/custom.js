@@ -114,12 +114,25 @@
 					//array on non-requestable library codes
 					var libCodes = ["44YORK_RBL_LIB", "44YORK_YML_LIB","44YORK_KM_LIB","44YORK_EXST_LIB","44YORK_EXST-B_LIB","44YORK_BIA_LIB","44YORK_NRM_LIB","44YORK_PET_LIB","44YORK_SOF_LIB","44YORK_ACA_LIB"]		
 					
-					var itemLib = vm.parentCtrl.result.delivery.bestlocation.libraryCode;
+					//array of holdings
+					var holdingArray = vm.parentCtrl.result.delivery.holding;
+
+					var i;
+					var len = holdingArray.length;
 					
-					console.log (vm);
+					console.log(holdingArray);
+					
+					//cycle through holding array to determine if at least one item is requestable
+					for (i = 0; i < len; i++) {
+						var rqst = libCodes.indexOf(holdingArray[i].libraryCode);
+						console.log(holdingArray[i].libraryCode);
+						//if (rqst != -1){
+						//break}
+					}
+													
 					
 					//is our current sub location in the non-requestable list?
-					var rqst = libCodes.indexOf(itemLib);
+					var rqst = libCodes.indexOf(holdingArray);
 				};
 				
 				if (!elementExists) {	
