@@ -50,9 +50,9 @@
 		browzine.script.src = "https://s3.amazonaws.com/browzine-adapters/primo/browzine-primo-adapter.js";
 		document.head.appendChild(browzine.script);
 
-		// ... End BrowZine - Primo Integration
 		
-		
+		//************************** remove the below block as part of disabling book takeaway**********************//
+		//retrieve username for book takeaway
 		app.controller('prmUserAreaExpandableAfterController', function ($scope, $rootScope) {
 		    $rootScope.name = this.parentCtrl.userSessionManagerService.getUserName();
 		 });
@@ -61,9 +61,23 @@
 			bindings: { parentCtrl: '<' },
 			controller: 'prmUserAreaExpandableAfterController'
 		});
-		
+		//*******************************end remove block ************************************************************//
 
 		
+		
+		
+		//main book takeaway section
+		//********************replace the following component/controller with the below to remove book takeaway but preseve Browzine integration***********************************//
+			//  app.controller('prmSearchResultAvailabilityLineAfterController', function($scope) {
+			//window.browzine.primo.searchResult($scope);
+		    //});
+		 
+		    //app.component('prmSearchResultAvailabilityLineAfter', {
+		   // bindings: { parentCtrl: '<' },
+		   // controller: 'prmSearchResultAvailabilityLineAfterController'
+		   //});
+		
+		//configure book takeaway button
 		app.component('prmSearchResultAvailabilityLineAfter', {
 			bindings: { parentCtrl: '<',
 				buttonText: '@',
@@ -82,10 +96,8 @@
 		
 			//test whether item is available in physical form - any electronic delcategory means that 
 			//the request link shouldn't appear
-			//also, determinine whether user logged in, if they are the following will return null
-			//exclude KM/YML/Rare Books etc.
-			
 
+			//set local scope userID to value from rootScope
 			$scope.userID = $rootScope.name;
 			
 			var vm = this;
@@ -98,7 +110,9 @@
 			vm.showLocations = ['/fulldisplay', '/openurl'];
 			vm.Show = vm.showLocations.includes($location.path());
 			if(vm.Show){
+				//is user logged in?
 				var elementExists = document.getElementById("signInBtn");
+				//array of non-requestable delivery categories
 				var conditions = ["Alma-E", "Remote Search Resource", "Alma-D", "Online Resource"];
 				
 				//need to determine whether we are in overlay mode. If we are, the path to the subLocation will be different - $ctrl.isFullViewOverlayOpen
@@ -106,18 +120,16 @@
 				//path to item varies slightly according to whether we are in overlay mode, this can be retrieved by parentCtrl.isOverlayFullView(true/undefined)
 				vm.displayMode = vm.parentCtrl.isOverlayFullView;
 				
+				//is the delivery category in the list defined as non-requestable?
 				var delcat = conditions.some(function (el) {
 					return vm.parentCtrl.result.delivery.deliveryCategory.includes(el);
 				});
 
 				if (!delcat){
-					//array on non-requestable library codes
+					//array of non-requestable library codes
 					var libCodes = ["44YORK_RBL_LIB", "44YORK_YML_LIB","44YORK_KM_LIB","44YORK_EXST_LIB","44YORK_EXST-B_LIB","44YORK_BIA_LIB","44YORK_NRM_LIB","44YORK_PET_LIB","44YORK_SOF_LIB","44YORK_ACA_LIB"]		
 					
 					var itemLib = vm.parentCtrl.result.delivery.bestlocation.libraryCode;
-					
-					console.log (vm);
-					
 					//is our current sub location in the non-requestable list?
 					var rqst = libCodes.indexOf(itemLib);
 				};
@@ -186,7 +198,7 @@
 
 						vm.serviceText = 'Use our Book Takeaway Service';
 						
-					
+						//link to Google form with parameters retrieved above
 						vm.formURL ='https://docs.google.com/forms/d/e/1FAIpQLScm2fmPXpqeFDf2wUMZNkTLakZ_nI6sJWwstHSS7l3fu_inLw/viewform?entry.34625858=&entry.1752528148=' + title + '&entry.301156700=' + 
 						'&entry.97733718=' + author + '&entry.165289220=' + pub_year + '&entry.1078294971=&entry.2086517750=' + material_type + '&entry.1347329161=' + loc + '&entry.2093632974=' + shelfmark +  '&entry.435363005=' + userID + '&entry.1924359520=' + rec_id;
 					
@@ -196,18 +208,15 @@
 						vm.serviceText = '';
 					}
 					
-				
-				vm.ShowReqLink = Boolean(delcat == false);	
-				//additional filter on non-requestable subLocations
+				//determine whether book takeaway link should appear based on delcategory/library code
+				vm.ShowReqLink = Boolean(delcat == false);
 				vm.Requestable = Boolean(rqst == '-1');
 			}
 		}});
 		
 		
 		console.log('************************End Book Takeaway*************************');
-			
-
-		/*********************************************************/
+		/*******************end remove block ********************/
 		
 		
 
