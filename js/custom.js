@@ -112,28 +112,30 @@
 
 				if (!delcat){
 					//array on non-requestable library codes
-					var libCodes = ["44YORK_RBL_LIB", "44YORK_YML_LIB","44YORK_KM_LIB","44YORK_EXST_LIB","44YORK_EXST-B_LIB","44YORK_BIA_LIB","44YORK_NRM_LIB","44YORK_PET_LIB","44YORK_SOF_LIB","44YORK_ACA_LIB"]		
+					var libCodes = ["44YORK_RBL_LIB", "44YORK_KM_LIB","44YORK_EXST_LIB","44YORK_EXST-B_LIB","44YORK_BIA_LIB","44YORK_NRM_LIB","44YORK_PET_LIB","44YORK_SOF_LIB","44YORK_ACA_LIB"]		
+					
+					console.log(this);
 					
 					//array of holdings
+					//check for existence of array - won't be present for single holding items
 					var holdingArray = vm.parentCtrl.result.delivery.holding;
 
-					var i;
+					var i
+					var ii = 0;
 					var len = holdingArray.length;
-					
 					console.log(holdingArray);
 					
-					//cycle through holding array to determine if at least one item is requestable
-					for (i = 0; i < len; i++) {
-						var rqst = libCodes.indexOf(holdingArray[i].libraryCode);
-						console.log(holdingArray[i].libraryCode);
-						//if (rqst != -1){
-						//break}
-					}
-													
+					//is at least one item in holding array requestable?
 					
-					//is our current sub location in the non-requestable list?
-					var rqst = libCodes.indexOf(holdingArray);
-				};
+					var rqst = libCodes.some(function (ela) {
+					for (i = 0; i < len; i++) {
+							//return libCodes.indexOf(holdingArray[i].libraryCode);
+							return vm.parentCtrl.result.delivery.holding[i].libraryCode;
+						};
+					}
+				}
+					
+			
 				
 				if (!elementExists) {	
 					if (!delcat){
@@ -212,7 +214,7 @@
 				
 				vm.ShowReqLink = Boolean(delcat == false);	
 				//additional filter on non-requestable subLocations
-				vm.Requestable = Boolean(rqst == '-1');
+				vm.Requestable = Boolean(rqst == false);
 			}
 		}});
 		
