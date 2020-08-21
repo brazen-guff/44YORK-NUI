@@ -101,6 +101,8 @@
 				var elementExists = document.getElementById("signInBtn");
 				var conditions = ["Alma-E", "Remote Search Resource", "Alma-D", "Online Resource"];
 				
+				console.log(this);
+				
 				//need to determine whether we are in overlay mode. If we are, the path to the subLocation will be different - $ctrl.isFullViewOverlayOpen
 				//also, consider items with multiple holdings parentCtrl.delivery.holding[]
 				//path to item varies slightly according to whether we are in overlay mode, this can be retrieved by parentCtrl.isOverlayFullView(true/undefined)
@@ -112,31 +114,46 @@
 
 				if (!delcat){
 					//array on non-requestable library codes
-					var libCodes = ["44YORK_RBL_LIB", "44YORK_KM_LIB","44YORK_EXST_LIB","44YORK_EXST-B_LIB","44YORK_BIA_LIB","44YORK_NRM_LIB","44YORK_PET_LIB","44YORK_SOF_LIB","44YORK_ACA_LIB"]		
+					var libCodes = ["44YORK_RBL_LIB", "44YORK_EXST_LIB","44YORK_EXST-B_LIB","44YORK_BIA_LIB","44YORK_NRM_LIB","44YORK_PET_LIB","44YORK_SOF_LIB","44YORK_ACA_LIB"]		
+					
+					var libCodesRequestable = ["44YORK_KM_LIB", "44YORK_JBM_LIB"]
 					
 					console.log(this);
 					
 					//array of holdings
-					//check for existence of array - won't be present for single holding items
+					//check for existence of array - won't be present for single holding items	
 					var holdingArray = vm.parentCtrl.result.delivery.holding;
 
 					var i
 					var ii = 0;
 					var len = holdingArray.length;
+									
+					
 					console.log(holdingArray);
 					
 					//is at least one item in holding array requestable?
-					
-					var rqst = libCodes.some(function (ela) {
-					for (i = 0; i < len; i++) {
-							//return libCodes.indexOf(holdingArray[i].libraryCode);
-							return vm.parentCtrl.result.delivery.holding[i].libraryCode;
-						};
+					if (len != '0'){
+						console.log('***********multiple holdings*********');
+							for (i = 0; i < len; i++) {
+								//return libCodes.indexOf(holdingArray[i].libraryCode);
+								//return vm.parentCtrl.result.delivery.holding[i].libraryCode;
+								//console.log ('code is' + vm.parentCtrl.result.delivery.holding[i].libraryCode);
+								var curCode = vm.parentCtrl.result.delivery.holding[i].libraryCode;
+								console.log(curCode);
+								if (libCodesRequestable.includes(curCode)){
+									console.log ('requestable library present');
+									var rqst = true;
+								}				
+							};
+						}else{
+							console.log('*********single holding*************')
+							var curCode = vm.parentCtrl.result.delivery.bestlocation.libraryCode;
+							if (libCodesRequestable.includes(curCode)){
+									console.log ('requestable library present');
+									var rqst = true;
+								}				
 					}
-				}
 					
-			
-				
 				if (!elementExists) {	
 					if (!delcat){
 						//user logged in
@@ -214,9 +231,10 @@
 				
 				vm.ShowReqLink = Boolean(delcat == false);	
 				//additional filter on non-requestable subLocations
-				vm.Requestable = Boolean(rqst == false);
+				vm.Requestable = Boolean(rqst == true);
+				//console.log (vm.Requestable);
 			}
-		}});
+		}}});
 		
 		
 		console.log('************************End Book Takeaway*************************');
