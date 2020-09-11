@@ -125,13 +125,36 @@
 					return vm.parentCtrl.result.delivery.deliveryCategory.includes(el);
 				});
 
+				console.log(this);
+				
+				//YML changes - remove 44YORK_YML_LIB from array of non-requestable libraries
+				//perform additional lication-check for these - link should appear for YM and H locations - use subLocationCode
+
 				if (!delcat){
 					//array of non-requestable library codes
-					var libCodes = ["44YORK_RBL_LIB", "44YORK_YML_LIB", "44YORK_EXST_LIB","44YORK_EXST-B_LIB","44YORK_BIA_LIB","44YORK_NRM_LIB","44YORK_PET_LIB","44YORK_SOF_LIB","44YORK_ACA_LIB"]		
-					
+					var libCodes = ["44YORK_RBL_LIB", "44YORK_EXST_LIB","44YORK_EXST-B_LIB","44YORK_BIA_LIB","44YORK_NRM_LIB","44YORK_PET_LIB","44YORK_SOF_LIB","44YORK_ACA_LIB"]		
+									
+									
 					var itemLib = vm.parentCtrl.result.delivery.bestlocation.libraryCode;
+
 					//is our current sub location in the non-requestable list?
 					var rqst = libCodes.indexOf(itemLib);
+					
+					if (itemLib == '44YORK_YML_LIB'){
+						var subLocCode = vm.parentCtrl.result.delivery.bestlocation.subLocationCode;
+						if (subLocCode == 'YM'){
+							console.log ('*************requestable Minster***************');
+							rqst = '-1';
+						}else if (subLocCode == 'H'){
+							console.log ('*************requestable Minster***************');
+							rqst = '-1';
+						}else{
+							//non-requestable minster locations
+							console.log ('*************non-requestable Minster***************');
+							rqst = '1';
+						}
+					}
+					
 				};
 				
 				if (!elementExists) {	
