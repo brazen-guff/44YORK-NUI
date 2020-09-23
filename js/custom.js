@@ -126,9 +126,9 @@
 			
 			var vm = this;
 			
+			
 			console.log('************************MOVED Book Takeway Follows*************************');
 						
-			
 			console.log(vm);
 			
 			//are we on a fulldisplay page? If so, proceed
