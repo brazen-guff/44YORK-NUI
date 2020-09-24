@@ -77,7 +77,6 @@
 		   // controller: 'prmSearchResultAvailabilityLineAfterController'
 		   //});
 		
-		//configure book takeaway button
 		app.component('prmSearchResultAvailabilityLineAfter', {
 			bindings: { parentCtrl: '<',
 				buttonText: '@',
@@ -101,14 +100,14 @@
 		//***************************************move book takeaway****************************//
 		
 		//configure book takeaway button
-		app.component('prmServiceDetailsAfter', {
+		app.component('prmBriefResultContainerAfter', {
 			bindings: { parentCtrl: '<',
 				buttonText: '@',
 				buttonLink: '@',
 				formURL: '@' ,
 				Requestable: '@',
 				Show: '@'},
-			controller: 'prmServiceDetailsAfterController',
+			controller: 'prmBriefResultContainerAfterController',
 			
 			template: '\n <div ng-If="$ctrl.ShowReqLink && $ctrl.Requestable" class="bar filter-bar layout-align-center-center layout-row margin-top-medium" layout="row" layout-align="center center">\n          <span class="margin-right-small"></span>\n          <a ng-href="{{$ctrl.formURL}}" target="_blank">\n              <button class="button-with-icon zero-margin md-button md-button-raised md-primoExplore-theme" type="button" aria-label={{$ctrl.buttonText}} style="color: #00546E;">\n                  <prm-icon icon-type="svg" svg-icon-set="action" icon-definition="ic_description_24px"></prm-icon>\n                  <span style="text-transform: none;">{{$ctrl.serviceText}}</span>\n              </button>\n          </a>\n      </div>'
 			
@@ -116,7 +115,7 @@
 		});
 		
 		
-		app.controller('prmServiceDetailsAfterController', function ($scope, $rootScope, $location) {
+		app.controller('prmBriefResultContainerAfterController', function ($scope, $rootScope, $location) {
 
 			//test whether item is available in physical form - any electronic delcategory means that 
 			//the request link shouldn't appear
@@ -184,7 +183,7 @@
 				if (!elementExists) {	
 					if (!delcat){
 						//user logged in
-						vm.buttonText = 'Send to Me';
+						vm.buttonText = 'Use Book Takeaway for a postal loan or scan';
 											
 						//gather information for google form
 						
@@ -243,7 +242,7 @@
 				
 						var formURL = '';
 
-						vm.serviceText = 'Send to Me';
+						vm.serviceText = 'Use Book Takeaway for a postal loan or scan';
 						
 						//link to Google form with parameters retrieved above
 						vm.formURL ='https://docs.google.com/forms/d/e/1FAIpQLScm2fmPXpqeFDf2wUMZNkTLakZ_nI6sJWwstHSS7l3fu_inLw/viewform?entry.34625858=&entry.1752528148=' + title + '&entry.301156700=' + 
