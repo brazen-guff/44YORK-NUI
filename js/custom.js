@@ -362,7 +362,6 @@
 
 		/* end report problem */
 
-		angular.module('request-this', []);
 
 		angular.module('googleAnalytics', []);
 		angular.module('googleAnalytics').run(function ($rootScope, $interval, analyticsOptions) {
