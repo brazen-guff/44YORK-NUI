@@ -100,7 +100,9 @@
 		//***************************************move book takeaway****************************//
 		
 		//configure book takeaway button
-		app.component('prmBriefResultContainerAfter', {
+		//app.component('prmBriefResultContainerAfter', {
+			
+		app.component('prmBriefResultContainerAfter',{
 			bindings: { parentCtrl: '<',
 				buttonText: '@',
 				buttonLink: '@',
@@ -127,8 +129,6 @@
 			
 			
 			console.log('************************MOVED Book Takeway Follows*************************');
-						
-			console.log(vm);
 			
 			//are we on a fulldisplay page? If so, proceed
 			//if not, we are on a results page so none of the following is relevant
