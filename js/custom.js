@@ -77,17 +77,6 @@
 		   // controller: 'prmSearchResultAvailabilityLineAfterController'
 		   //});
 		
-		//configure book takeaway button
-		app.component('prmSearchResultAvailabilityLineAfter', {
-			bindings: { parentCtrl: '<',
-				buttonText: '@',
-				buttonLink: '@',
-				formURL: '@' ,
-				Requestable: '@',
-				Show: '@'},
-			controller: 'prmSearchResultAvailabilityLineAfterController',
-
-		});
 
 		app.controller('prmSearchResultAvailabilityLineAfterController', function ($scope) {
 
@@ -97,18 +86,14 @@
 		);
 		
 		
-		
-		//***************************************move book takeaway****************************//
-		
-		//configure book takeaway button
-		app.component('prmServiceDetailsAfter', {
+		app.component('prmSearchResultAvailabilityLineAfter', {
 			bindings: { parentCtrl: '<',
 				buttonText: '@',
 				buttonLink: '@',
 				formURL: '@' ,
 				Requestable: '@',
 				Show: '@'},
-			controller: 'prmServiceDetailsAfterController',
+			controller: 'prmSearchResultAvailabilityLineAfterController',
 			
 			template: '\n <div ng-If="$ctrl.ShowReqLink && $ctrl.Requestable" class="bar filter-bar layout-align-center-center layout-row margin-top-medium" layout="row" layout-align="center center">\n          <span class="margin-right-small"></span>\n          <a ng-href="{{$ctrl.formURL}}" target="_blank">\n              <button class="button-with-icon zero-margin md-button md-button-raised md-primoExplore-theme" type="button" aria-label={{$ctrl.buttonText}} style="color: #00546E;">\n                  <prm-icon icon-type="svg" svg-icon-set="action" icon-definition="ic_description_24px"></prm-icon>\n                  <span style="text-transform: none;">{{$ctrl.serviceText}}</span>\n              </button>\n          </a>\n      </div>'
 			
@@ -116,7 +101,9 @@
 		});
 		
 		
-		app.controller('prmServiceDetailsAfterController', function ($scope, $rootScope, $location) {
+		app.controller('prmSearchResultAvailabilityLineAfterController', function ($scope, $rootScope, $location) {
+			
+			window.browzine.primo.searchResult($scope);
 
 			//test whether item is available in physical form - any electronic delcategory means that 
 			//the request link shouldn't appear
@@ -125,12 +112,7 @@
 			$scope.userID = $rootScope.name;
 			
 			var vm = this;
-			
-			
-			console.log('************************MOVED Book Takeway Follows*************************');
-						
-			console.log(vm);
-			
+									
 			//are we on a fulldisplay page? If so, proceed
 			//if not, we are on a results page so none of the following is relevant
 			vm.showLocations = ['/fulldisplay', '/openurl'];
@@ -143,12 +125,12 @@
 				
 				//need to determine whether we are in overlay mode. If we are, the path to the subLocation will be different - $ctrl.isFullViewOverlayOpen
 				//also, consider items with multiple holdings parentCtrl.delivery.holding[]
-				//path to item varies slightly according to whether we are in overlay mode, this can be retrieved by parentCtrl.isOverlayFullView(true/undefined)
+				//path to result varies slightly according to whether we are in overlay mode, this can be retrieved by parentCtrl.isOverlayFullView(true/undefined)
 				vm.displayMode = vm.parentCtrl.isOverlayFullView;
 				
 				//is the delivery category in the list defined as non-requestable?
 				var delcat = conditions.some(function (el) {
-					return vm.parentCtrl.item.delivery.deliveryCategory.includes(el);
+					return vm.parentCtrl.result.delivery.deliveryCategory.includes(el);
 				});
 		
 				//YML changes - remove 44YORK_YML_LIB from array of non-requestable libraries
@@ -159,13 +141,13 @@
 					var libCodes = ["44YORK_RBL_LIB", "44YORK_EXST_LIB","44YORK_EXST-B_LIB","44YORK_BIA_LIB","44YORK_NRM_LIB","44YORK_PET_LIB","44YORK_SOF_LIB","44YORK_ACA_LIB"]		
 									
 									
-					var itemLib = vm.parentCtrl.item.delivery.bestlocation.libraryCode;
+					var itemLib = vm.parentCtrl.result.delivery.bestlocation.libraryCode;
 
 					//is our current sub location in the non-requestable list?
 					var rqst = libCodes.indexOf(itemLib);
 					
 					if (itemLib == '44YORK_YML_LIB'){
-						var subLocCode = vm.parentCtrl.item.delivery.bestlocation.subLocationCode;
+						var subLocCode = vm.parentCtrl.result.delivery.bestlocation.subLocationCode;
 						if (subLocCode == 'YM'){
 							console.log ('*************requestable Minster***************');
 							rqst = '-1';
@@ -184,56 +166,56 @@
 				if (!elementExists) {	
 					if (!delcat){
 						//user logged in
-						vm.buttonText = 'Send to Me';
+						vm.buttonText = 'Use Book Takeaway for postal loan or scan';
 											
 						//gather information for google form
 						
 						if (vm.displayMode){ //overlay
 											
-							var rec_id = vm.parentCtrl.item.pnx.control.sourcerecordid[0];
+							var rec_id = vm.parentCtrl.result.pnx.control.sourcerecordid[0];
 																	
-							var title = encodeURIComponent(vm.parentCtrl.item.pnx.display.title[0]);
+							var title = encodeURIComponent(vm.parentCtrl.result.pnx.display.title[0]);
 							//entry.1752528148=Title
 
-							var author = encodeURIComponent(vm.parentCtrl.item.pnx.display.creator);
+							var author = encodeURIComponent(vm.parentCtrl.result.pnx.display.creator);
 							//&entry.1866861278=Author
 
-							var material_type = encodeURIComponent(vm.parentCtrl.item.pnx.addata.format);
+							var material_type = encodeURIComponent(vm.parentCtrl.result.pnx.addata.format);
 							//&entry.1859840384=Material+type
 
-							if (vm.parentCtrl.item.pnx.addata.hasOwnProperty('risdate')){
-								var pub_year = encodeURIComponent(vm.parentCtrl.item.pnx.addata.risdate[0]);
+							if (vm.parentCtrl.result.pnx.addata.hasOwnProperty('risdate')){
+								var pub_year = encodeURIComponent(vm.parentCtrl.result.pnx.addata.risdate[0]);
 							}
 
-							var loc = encodeURIComponent(vm.parentCtrl.item.delivery.bestlocation.mainLocation) + ' ' + encodeURIComponent(vm.parentCtrl.item.delivery.bestlocation.subLocation);
+							var loc = encodeURIComponent(vm.parentCtrl.result.delivery.bestlocation.mainLocation) + ' ' + encodeURIComponent(vm.parentCtrl.result.delivery.bestlocation.subLocation);
 
-							var shelfmark = vm.parentCtrl.item.delivery.bestlocation.callNumber;
+							var shelfmark = vm.parentCtrl.result.delivery.bestlocation.callNumber;
 							//&entry.1777930827=Shelfmark
 							shelfmark = encodeURIComponent(shelfmark.replace('&nbsp;&nbsp;', ''));
 						}else{
 						//not in overlay	
 														
-							var rec_id = vm.parentCtrl.item.pnx.control.sourcerecordid[0];
+							var rec_id = vm.parentCtrl.result.pnx.control.sourcerecordid[0];
 							
 											
-							var title = encodeURIComponent(vm.parentCtrl.item.pnx.display.title[0]);
+							var title = encodeURIComponent(vm.parentCtrl.result.pnx.display.title[0]);
 							//entry.1752528148=Title
 
-							var author = encodeURIComponent(vm.parentCtrl.item.pnx.display.creator);
+							var author = encodeURIComponent(vm.parentCtrl.result.pnx.display.creator);
 							//&entry.1866861278=Author
 
-							var material_type = encodeURIComponent(vm.parentCtrl.item.pnx.addata.format);
+							var material_type = encodeURIComponent(vm.parentCtrl.result.pnx.addata.format);
 							//&entry.1859840384=Material+type
 
 							//journal records might not have this field
 							
-							if (vm.parentCtrl.item.pnx.addata.hasOwnProperty('risdate')){
-								var pub_year = encodeURIComponent(vm.parentCtrl.item.pnx.addata.risdate[0]);
+							if (vm.parentCtrl.result.pnx.addata.hasOwnProperty('risdate')){
+								var pub_year = encodeURIComponent(vm.parentCtrl.result.pnx.addata.risdate[0]);
 							}
 							
-							var loc = encodeURIComponent(vm.parentCtrl.item.delivery.bestlocation.mainLocation) + ' ' + encodeURIComponent(vm.parentCtrl.item.delivery.bestlocation.subLocation);
+							var loc = encodeURIComponent(vm.parentCtrl.result.delivery.bestlocation.mainLocation) + ' ' + encodeURIComponent(vm.parentCtrl.result.delivery.bestlocation.subLocation);
 
-							var shelfmark = vm.parentCtrl.item.delivery.bestlocation.callNumber;
+							var shelfmark = vm.parentCtrl.result.delivery.bestlocation.callNumber;
 							//&entry.1777930827=Shelfmark
 							shelfmark = encodeURIComponent(shelfmark.replace('&nbsp;&nbsp;', ''));
 							
@@ -243,7 +225,7 @@
 				
 						var formURL = '';
 
-						vm.serviceText = 'Send to Me';
+						vm.serviceText = 'Use Book Takeaway for postal loan or scan';
 						
 						//link to Google form with parameters retrieved above
 						vm.formURL ='https://docs.google.com/forms/d/e/1FAIpQLScm2fmPXpqeFDf2wUMZNkTLakZ_nI6sJWwstHSS7l3fu_inLw/viewform?entry.34625858=&entry.1752528148=' + title + '&entry.301156700=' + 
