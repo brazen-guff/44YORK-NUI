@@ -225,7 +225,7 @@
 				
 						var formURL = '';
 
-						vm.serviceText = 'Use Book Takeaway for postal loan or scan';
+						vm.serviceText = 'Use Book Takeaway for campus delivery (self isolating), postal loan or scan';
 						
 						//link to Google form with parameters retrieved above
 						vm.formURL ='https://docs.google.com/forms/d/e/1FAIpQLScm2fmPXpqeFDf2wUMZNkTLakZ_nI6sJWwstHSS7l3fu_inLw/viewform?entry.34625858=&entry.1752528148=' + title + '&entry.301156700=' + 
