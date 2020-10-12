@@ -166,7 +166,7 @@
 				if (!elementExists) {	
 					if (!delcat){
 						//user logged in
-						vm.buttonText = 'Use Book Takeaway for postal loan or scan';
+						vm.buttonText = 'Use Book Takeaway for campus delivery (self isolating), postal loan or scan';
 											
 						//gather information for google form
 						
