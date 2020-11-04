@@ -142,12 +142,13 @@
 									
 									
 					var itemLib = vm.parentCtrl.result.delivery.bestlocation.libraryCode;
-
+					
 					//is our current sub location in the non-requestable list?
 					var rqst = libCodes.indexOf(itemLib);
 					
+					//comment this block out due to closure of YML 04/11/20 PEH
 					if (itemLib == '44YORK_YML_LIB'){
-						var subLocCode = vm.parentCtrl.result.delivery.bestlocation.subLocationCode;
+						/*var subLocCode = vm.parentCtrl.result.delivery.bestlocation.subLocationCode;
 						if (subLocCode == 'YM'){
 							console.log ('*************requestable Minster***************');
 							rqst = '-1';
@@ -158,7 +159,8 @@
 							//non-requestable minster locations
 							console.log ('*************non-requestable Minster***************');
 							rqst = '1';
-						}
+						}*/
+						rqst = '1';
 					}
 					
 				};
