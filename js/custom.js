@@ -240,8 +240,13 @@
 		
 		
 		console.log('************************End Book Takeaway*************************');
+		
+		
 		/*******************end remove block ********************/
 		
+		app.controller('prmPreFiltersAfterController', [function () {
+
+		}]);
 		
 
 		/*change default no results page*/

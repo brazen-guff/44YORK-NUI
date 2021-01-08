@@ -529,6 +529,11 @@ flex-direction: column;
 	
 }
 
+.section-title a:link {
+	color: red;
+
+}
+
 	
 /*end peh customizations */
 
