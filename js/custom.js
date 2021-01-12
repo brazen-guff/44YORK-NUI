@@ -168,7 +168,7 @@
 				if (!elementExists) {	
 					if (!delcat){
 						//user logged in
-						vm.buttonText = 'Use Book Takeaway for campus delivery (self isolating), postal loan or scan';
+						vm.buttonText = 'Use Book Takeaway for postal loan, scan, or campus delivery (self isolating)';
 											
 						//gather information for google form
 						
@@ -227,7 +227,7 @@
 				
 						var formURL = '';
 
-						vm.serviceText = 'Use Book Takeaway for campus delivery (self isolating), postal loan or scan';
+						vm.serviceText = 'Use Book Takeaway for postal loan, scan, or campus delivery (self isolating)';
 						
 						//link to Google form with parameters retrieved above
 						vm.formURL ='https://docs.google.com/forms/d/e/1FAIpQLScm2fmPXpqeFDf2wUMZNkTLakZ_nI6sJWwstHSS7l3fu_inLw/viewform?entry.34625858=&entry.1752528148=' + title + '&entry.301156700=' + 
