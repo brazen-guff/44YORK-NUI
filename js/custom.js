@@ -249,6 +249,15 @@
 		console.log('************************End Book Takeaway*************************');
 		/*******************end remove block ********************/
 		
+		app.controller('prmPreFiltersAfterController', function ($scope) {
+		 });
+		
+		app.component('prmPreFiltersAfter', {
+			bindings: { parentCtrl: '<' },
+			controller: 'prmPreFiltersAfterController',
+			template: '<div id="libkey-intro">Search for an article via its DOI  <a href="https://libkey.io/libraries/565" target="_blank">using LibKey</a></div>'
+		});
+				
 		
 
 		/*change default no results page*/
@@ -387,6 +396,21 @@
 			defaultTitle: 'YorSearch'
 		});
 	})();
+	
+	
+
+	var node = document.createElement("div"); 
+	var textnode = document.createTextNode("Water");
+	node.appendChild(textnode);  	
+	
+	window.addEventListener('load', (event) => {
+	  console.log('page is fully loaded');
+	  //locate preFilter dropdowns
+	  var ddown = document.querySelector(".pre-filters-container");
+	  ddown.appendChild(node);
+	  
+	  
+	});
 
 	/*- ########## ---------- Non AngularJS code ---------- ########## */
 	/*- ########## ----------Footer, code courtesy of EL/NLNZ - measure page once "is sticky" is put in and (try) to put footer after results ---------- ########## */
@@ -414,4 +438,7 @@
 		} else {
 			document.querySelectorAll('.primo-scrollbar, .is-stuck')[0].style.maxHeight = 'calc(100% - 2em)';
 		}
-	});;
+	});
+	
+
+	
