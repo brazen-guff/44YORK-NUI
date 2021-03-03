@@ -249,16 +249,7 @@
 		console.log('************************End Book Takeaway*************************');
 		/*******************end remove block ********************/
 		
-		app.controller('prmPreFiltersAfterController', function ($scope) {
-		 });
-		
-		app.component('prmPreFiltersAfter', {
-			bindings: { parentCtrl: '<' },
-			controller: 'prmPreFiltersAfterController',
-			template: '<div id="libkey-intro">Search for an article via its DOI  <a href="https://libkey.io/libraries/565" target="_blank">using LibKey</a></div>'
-		});
-				
-		
+
 
 		/*change default no results page*/
 
