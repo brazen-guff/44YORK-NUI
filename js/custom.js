@@ -134,11 +134,12 @@
 				});
 		
 				//YML changes - remove 44YORK_YML_LIB from array of non-requestable libraries
-				//perform additional lication-check for these - link should appear for YM and H locations - use subLocationCode
+				//perform additional location-check for these - link should appear for YM and H locations - use subLocationCode
 
 				if (!delcat){
 					//array of non-requestable library codes
-					var libCodes = ["44YORK_RBL_LIB", "44YORK_EXST_LIB","44YORK_EXST-B_LIB","44YORK_BIA_LIB","44YORK_NRM_LIB","44YORK_PET_LIB","44YORK_SOF_LIB","44YORK_ACA_LIB"]		
+					//update for 12/04/21 remove KM from book takeaway
+					var libCodes = ["44YORK_RBL_LIB", "44YORK_EXST_LIB","44YORK_EXST-B_LIB","44YORK_BIA_LIB","44YORK_NRM_LIB","44YORK_PET_LIB","44YORK_SOF_LIB","44YORK_ACA_LIB", "44YORK_KM_LIB"]		
 									
 									
 					var itemLib = vm.parentCtrl.result.delivery.bestlocation.libraryCode;
