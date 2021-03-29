@@ -67,6 +67,7 @@
 		
 		
 		//main book takeaway section
+		
 		//********************replace the following component/controller with the below to remove book takeaway but preseve Browzine integration***********************************//
 			//  app.controller('prmSearchResultAvailabilityLineAfterController', function($scope) {
 			//window.browzine.primo.searchResult($scope);
@@ -78,12 +79,14 @@
 		   //});
 		
 
-		app.controller('prmSearchResultAvailabilityLineAfterController', function ($scope) {
+		//app.controller('prmSearchResultAvailabilityLineAfterController', function ($scope) {
 
-			window.browzine.primo.searchResult($scope);
+		//	window.browzine.primo.searchResult($scope);
 		
-			}
-		);
+		//	}
+		//);
+		
+		//*****no book takeaway*******//
 		
 		
 		app.component('prmSearchResultAvailabilityLineAfter', {
@@ -138,8 +141,7 @@
 
 				if (!delcat){
 					//array of non-requestable library codes
-					//update for 12/04/21 remove KM from book takeaway
-					var libCodes = ["44YORK_RBL_LIB", "44YORK_EXST_LIB","44YORK_EXST-B_LIB","44YORK_BIA_LIB","44YORK_NRM_LIB","44YORK_PET_LIB","44YORK_SOF_LIB","44YORK_ACA_LIB", "44YORK_KM_LIB"]		
+					var libCodes = ["44YORK_RBL_LIB", "44YORK_EXST_LIB","44YORK_EXST-B_LIB","44YORK_BIA_LIB","44YORK_NRM_LIB","44YORK_PET_LIB","44YORK_SOF_LIB","44YORK_ACA_LIB"]		
 									
 									
 					var itemLib = vm.parentCtrl.result.delivery.bestlocation.libraryCode;
@@ -248,6 +250,8 @@
 		
 		
 		console.log('************************End Book Takeaway*************************');
+		
+		
 		/*******************end remove block ********************/
 		
 
