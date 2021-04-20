@@ -542,6 +542,10 @@ flex-direction: column;
 	  border-radius: 15px;
 }
 
+body > primo-explore > div > prm-explore-main > ui-view > prm-collection-discovery > prm-collection-gallery > prm-collection-search > md-toolbar > div > div:nth-child(2) > div {
+	
+	display:none;
+}
 	
 /*end peh customizations */
 
