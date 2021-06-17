@@ -392,19 +392,6 @@
 		});
 	})();
 	
-	
-
-	var node = document.createElement("div"); 
-	var textnode = document.createTextNode("Water");
-	node.appendChild(textnode);  	
-	
-	window.addEventListener('load', (event) => {
-	  console.log('page is fully loaded');
-	  //locate preFilter dropdowns
-	  var ddown = document.querySelector(".pre-filters-container");
-	  ddown.appendChild(node);
-	  
-	  
 	});
 
 	/*- ########## ---------- Non AngularJS code ---------- ########## */
