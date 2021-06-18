@@ -391,7 +391,13 @@
 			defaultTitle: 'YorSearch'
 		});
 	})();
+	 	
 	
+	window.addEventListener('load', (event) => {
+	  console.log('page is fully loaded');
+	  //locate preFilter dropdowns
+	  var ddown = document.querySelector(".pre-filters-container");
+	  
 	});
 
 	/*- ########## ---------- Non AngularJS code ---------- ########## */
