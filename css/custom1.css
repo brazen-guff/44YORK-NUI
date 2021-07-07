@@ -546,7 +546,17 @@ body > primo-explore > div > prm-explore-main > ui-view > prm-collection-discove
 	
 	display:none;
 }
-	
+
+/* Emergency Broadcast Banner*/
+body::before {
+ content: "Please note that King's Manor Library is currently closed. Requests and deliveries to and from King's Manor are therefore unavailable";
+ display: inline-block;
+ background: #ecd90f;
+ text-align: center;
+ width: 100%;
+ font-weight: bold;
+}
+
 /*end peh customizations */
 
 
