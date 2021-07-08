@@ -138,10 +138,12 @@
 		
 				//YML changes - remove 44YORK_YML_LIB from array of non-requestable libraries
 				//perform additional location-check for these - link should appear for YM and H locations - use subLocationCode
+				
+				//update 08/07/21 KM no lonber requestable during refurbishment
 
 				if (!delcat){
 					//array of non-requestable library codes
-					var libCodes = ["44YORK_RBL_LIB", "44YORK_EXST_LIB","44YORK_EXST-B_LIB","44YORK_BIA_LIB","44YORK_NRM_LIB","44YORK_PET_LIB","44YORK_SOF_LIB","44YORK_ACA_LIB"]		
+					var libCodes = ["44YORK_RBL_LIB", "44YORK_EXST_LIB","44YORK_EXST-B_LIB","44YORK_BIA_LIB", "44YORK_KM_LIB","44YORK_NRM_LIB","44YORK_PET_LIB","44YORK_SOF_LIB","44YORK_ACA_LIB"]		
 									
 									
 					var itemLib = vm.parentCtrl.result.delivery.bestlocation.libraryCode;
