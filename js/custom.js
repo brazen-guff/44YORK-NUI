@@ -115,11 +115,18 @@
 			$scope.userID = $rootScope.name;
 			
 			var vm = this;
+			console.log(vm);
+			
+			var avail_link = vm.parentCtrl.result.delivery.availabilityLinksURL[0];
+			console.log(avail_link);
 									
 			//are we on a fulldisplay page? If so, proceed
 			//if not, we are on a results page so none of the following is relevant
 			vm.showLocations = ['/fulldisplay', '/openurl'];
 			vm.Show = vm.showLocations.includes($location.path());
+			
+
+			
 			if(vm.Show){
 				//is user logged in?
 				var elementExists = document.getElementById("signInBtn");
@@ -199,8 +206,7 @@
 							//&entry.1777930827=Shelfmark
 							shelfmark = encodeURIComponent(shelfmark.replace('&nbsp;&nbsp;', ''));
 						}else{
-						//not in overlay	
-														
+						//not in overlay															
 							var rec_id = vm.parentCtrl.result.pnx.control.sourcerecordid[0];
 							
 											
@@ -252,9 +258,14 @@
 		
 		console.log('************************End Book Takeaway*************************');
 		
+
 		
 		/*******************end remove block ********************/
 		
+		
+		/*borthwick finding aid custom display*/
+		
+	
 
 
 		/*change default no results page*/
