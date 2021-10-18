@@ -114,19 +114,14 @@
 			//set local scope userID to value from rootScope
 			$scope.userID = $rootScope.name;
 			
-			var vm = this;
-			console.log(vm);
-			
-			var avail_link = vm.parentCtrl.result.delivery.availabilityLinksURL[0];
-			console.log(avail_link);
-									
+			var vm = this;	
+								
 			//are we on a fulldisplay page? If so, proceed
 			//if not, we are on a results page so none of the following is relevant
 			vm.showLocations = ['/fulldisplay', '/openurl'];
 			vm.Show = vm.showLocations.includes($location.path());
 			
-
-			
+		
 			if(vm.Show){
 				//is user logged in?
 				var elementExists = document.getElementById("signInBtn");
