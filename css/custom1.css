@@ -544,7 +544,7 @@ flex-direction: column;
 
 body > primo-explore > div > prm-explore-main > ui-view > prm-collection-discovery > prm-collection-gallery > prm-collection-search > md-toolbar > div > div:nth-child(2) > div {
 	
-	display:none;
+	/*display:none;*/
 }
 
 /* Emergency Broadcast Banner
