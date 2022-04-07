@@ -2,11 +2,20 @@
 "use strict";
 "use strict";
 
-
-		console.log("::LOADING 44YORK CUSTOM::");
+ 	console.log("::LOADING 44YORK CUSTOM::");
 
 		var app = angular.module('viewCustom', ['angularLoad', 'reportProblem', 'googleAnalytics']).run (function($rootScope){
-		});;
+			
+					var url = window.location.href;			
+					
+					//check for incoming openurl link 
+					if (window.location.href.indexOf("https://openurl.york.ac.uk") > -1){
+							var newUrl = url.replace("https://openurl.york.ac.uk", "https://yorsearch.york.ac.uk");	
+                            console.log(newUrl);							
+							window.location.replace(newUrl);
+							
+					}		
+		});
 		
 	
 		// Begin BrowZine - Primo Integration...
@@ -115,7 +124,7 @@
 			$scope.userID = $rootScope.name;
 			
 			var vm = this;	
-								
+									
 			//are we on a fulldisplay page? If so, proceed
 			//if not, we are on a results page so none of the following is relevant
 			vm.showLocations = ['/fulldisplay', '/openurl'];
@@ -146,7 +155,7 @@
 				if (!delcat){
 					//array of non-requestable library codes
 					var libCodes = ["44YORK_RBL_LIB", "44YORK_EXST_LIB","44YORK_EXST-B_LIB","44YORK_BIA_LIB","44YORK_NRM_LIB","44YORK_PET_LIB","44YORK_SOF_LIB","44YORK_ACA_LIB"]		
-									
+								
 									
 					var itemLib = vm.parentCtrl.result.delivery.bestlocation.libraryCode;
 					
