@@ -25,13 +25,13 @@ prm-topbar {
 }
 
 /*larger font on top nav */
-prm-main-menu[menu-type=menu] .md-button,prm-topbar .top-nav-bar .md-button{font-size:1.25em;text-transform:capitalize;font-weight:600;font-size:1vw}
+prm-main-menu[menu-type=menu] .md-button,prm-topbar .top-nav-bar .md-button{font-size:1.25em;text-transform:capitalize;font-weight:600;font-size:1.5vh}
 
 
-/login menu */
+/*login menu */
 .md-menu {
 	
-	/*display: none;*/
+
 }
 
 
@@ -544,7 +544,7 @@ flex-direction: column;
 
 body > primo-explore > div > prm-explore-main > ui-view > prm-collection-discovery > prm-collection-gallery > prm-collection-search > md-toolbar > div > div:nth-child(2) > div {
 	
-	display:none;
+	/*display:none;*/
 }
 
 /* Emergency Broadcast Banner

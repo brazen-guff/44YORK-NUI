@@ -2,13 +2,16 @@
 "use strict";
 "use strict";
 
-
-		console.log("::LOADING 44YORK CUSTOM::");
+ 	console.log("::LOADING 44YORK CUSTOM::");
 
 		var app = angular.module('viewCustom', ['angularLoad', 'reportProblem', 'googleAnalytics']).run (function($rootScope){
-		});;
-		
-	
+
+			// Redirect incoming openurl.york.ac.uk requests
+			if (location.host == 'openurl.york.ac.uk') location.href = location.href.replace("//openurl.york.ac.uk", "//yorsearch.york.ac.uk");
+
+		});
+
+
 		// Begin BrowZine - Primo Integration...
 		window.browzine = {
 			api: "https://public-api.thirdiron.com/public/v1/libraries/565",
@@ -50,45 +53,45 @@
 		browzine.script.src = "https://s3.amazonaws.com/browzine-adapters/primo/browzine-primo-adapter.js";
 		document.head.appendChild(browzine.script);
 
-		
+
 		//************************** remove the below block as part of disabling book takeaway**********************//
 		//retrieve username for book takeaway
 		app.controller('prmUserAreaExpandableAfterController', function ($scope, $rootScope) {
 		    $rootScope.name = this.parentCtrl.userSessionManagerService.getUserName();
 		 });
-		
+
 		app.component('prmUserAreaExpandableAfter', {
 			bindings: { parentCtrl: '<' },
 			controller: 'prmUserAreaExpandableAfterController'
 		});
 		//*******************************end remove block ************************************************************//
 
-		
-		
-		
+
+
+
 		//main book takeaway section
-		
+
 		//********************replace the following component/controller with the below to remove book takeaway but preseve Browzine integration***********************************//
 			//  app.controller('prmSearchResultAvailabilityLineAfterController', function($scope) {
 			//window.browzine.primo.searchResult($scope);
 		    //});
-		 
+
 		    //app.component('prmSearchResultAvailabilityLineAfter', {
 		   // bindings: { parentCtrl: '<' },
 		   // controller: 'prmSearchResultAvailabilityLineAfterController'
 		   //});
-		
+
 
 		//app.controller('prmSearchResultAvailabilityLineAfterController', function ($scope) {
 
 		//	window.browzine.primo.searchResult($scope);
-		
+
 		//	}
 		//);
-		
+
 		//*****no book takeaway*******//
-		
-		
+
+
 		app.component('prmSearchResultAvailabilityLineAfter', {
 			bindings: { parentCtrl: '<',
 				buttonText: '@',
@@ -97,62 +100,62 @@
 				Requestable: '@',
 				Show: '@'},
 			controller: 'prmSearchResultAvailabilityLineAfterController',
-			
+
 			template: '\n <div ng-If="$ctrl.ShowReqLink && $ctrl.Requestable" class="bar filter-bar layout-align-center-center layout-row margin-top-medium" layout="row" layout-align="center center">\n          <span class="margin-right-small"></span>\n          <a ng-href="{{$ctrl.formURL}}" target="_blank">\n              <button class="button-with-icon zero-margin md-button md-button-raised md-primoExplore-theme" type="button" aria-label={{$ctrl.buttonText}} style="color: #00546E;">\n                  <prm-icon icon-type="svg" svg-icon-set="action" icon-definition="ic_description_24px"></prm-icon>\n                  <span style="text-transform: none;">{{$ctrl.serviceText}}</span>\n              </button>\n          </a>\n      </div>'
-			
+
 
 		});
-		
-		
+
+
 		app.controller('prmSearchResultAvailabilityLineAfterController', function ($scope, $rootScope, $location) {
-			
+
 			window.browzine.primo.searchResult($scope);
 
-			//test whether item is available in physical form - any electronic delcategory means that 
+			//test whether item is available in physical form - any electronic delcategory means that
 			//the request link shouldn't appear
 
 			//set local scope userID to value from rootScope
 			$scope.userID = $rootScope.name;
-			
-			var vm = this;	
-								
+
+			var vm = this;
+
 			//are we on a fulldisplay page? If so, proceed
 			//if not, we are on a results page so none of the following is relevant
 			vm.showLocations = ['/fulldisplay', '/openurl'];
 			vm.Show = vm.showLocations.includes($location.path());
-			
-		
+
+
 			if(vm.Show){
 				//is user logged in?
 				var elementExists = document.getElementById("signInBtn");
 				//array of non-requestable delivery categories
 				var conditions = ["Alma-E", "Remote Search Resource", "Alma-D", "Online Resource"];
-				
+
 				//need to determine whether we are in overlay mode. If we are, the path to the subLocation will be different - $ctrl.isFullViewOverlayOpen
 				//also, consider items with multiple holdings parentCtrl.delivery.holding[]
 				//path to result varies slightly according to whether we are in overlay mode, this can be retrieved by parentCtrl.isOverlayFullView(true/undefined)
 				vm.displayMode = vm.parentCtrl.isOverlayFullView;
-				
+
 				//is the delivery category in the list defined as non-requestable?
 				var delcat = conditions.some(function (el) {
 					return vm.parentCtrl.result.delivery.deliveryCategory.includes(el);
 				});
-		
+
 				//YML changes - remove 44YORK_YML_LIB from array of non-requestable libraries
 				//perform additional location-check for these - link should appear for YM and H locations - use subLocationCode
-				
+
 				//update 08/07/21 KM no lonber requestable during refurbishment
 
 				if (!delcat){
 					//array of non-requestable library codes
-					var libCodes = ["44YORK_RBL_LIB", "44YORK_EXST_LIB","44YORK_EXST-B_LIB","44YORK_BIA_LIB","44YORK_NRM_LIB","44YORK_PET_LIB","44YORK_SOF_LIB","44YORK_ACA_LIB"]		
-									
-									
+					var libCodes = ["44YORK_RBL_LIB", "44YORK_EXST_LIB","44YORK_EXST-B_LIB","44YORK_BIA_LIB","44YORK_NRM_LIB","44YORK_PET_LIB","44YORK_SOF_LIB","44YORK_ACA_LIB"]
+
+
 					var itemLib = vm.parentCtrl.result.delivery.bestlocation.libraryCode;
-					
+
 					//is our current sub location in the non-requestable list?
 					var rqst = libCodes.indexOf(itemLib);
-					
+
 					//comment this block out due to closure of YML 04/11/20 PEH
 					if (itemLib == '44YORK_YML_LIB'){
 						var subLocCode = vm.parentCtrl.result.delivery.bestlocation.subLocationCode;
@@ -168,20 +171,20 @@
 							rqst = '1';
 						}
 					}
-					
+
 				};
-				
-				if (!elementExists) {	
+
+				if (!elementExists) {
 					if (!delcat){
 						//user logged in
 						vm.buttonText = 'Use Book Takeaway for postal loan, scan, or campus delivery (self isolating)';
-											
+
 						//gather information for google form
-						
+
 						if (vm.displayMode){ //overlay
-											
+
 							var rec_id = vm.parentCtrl.result.pnx.control.sourcerecordid[0];
-																	
+
 							var title = encodeURIComponent(vm.parentCtrl.result.pnx.display.title[0]);
 							//entry.1752528148=Title
 
@@ -201,10 +204,10 @@
 							//&entry.1777930827=Shelfmark
 							shelfmark = encodeURIComponent(shelfmark.replace('&nbsp;&nbsp;', ''));
 						}else{
-						//not in overlay															
+						//not in overlay
 							var rec_id = vm.parentCtrl.result.pnx.control.sourcerecordid[0];
-							
-											
+
+
 							var title = encodeURIComponent(vm.parentCtrl.result.pnx.display.title[0]);
 							//entry.1752528148=Title
 
@@ -215,52 +218,52 @@
 							//&entry.1859840384=Material+type
 
 							//journal records might not have this field
-							
+
 							if (vm.parentCtrl.result.pnx.addata.hasOwnProperty('risdate')){
 								var pub_year = encodeURIComponent(vm.parentCtrl.result.pnx.addata.risdate[0]);
 							}
-							
+
 							var loc = encodeURIComponent(vm.parentCtrl.result.delivery.bestlocation.mainLocation) + ' ' + encodeURIComponent(vm.parentCtrl.result.delivery.bestlocation.subLocation);
 
 							var shelfmark = vm.parentCtrl.result.delivery.bestlocation.callNumber;
 							//&entry.1777930827=Shelfmark
 							shelfmark = encodeURIComponent(shelfmark.replace('&nbsp;&nbsp;', ''));
-							
+
 						}
 
 						var userID = $scope.userID;
-				
+
 						var formURL = '';
 
 						vm.serviceText = '​Get postal loans & scans via Book Takeaway - or for those self-isolating only, get Campus Delivery'
-						
+
 						//link to Google form with parameters retrieved above
-						vm.formURL ='https://docs.google.com/forms/d/e/1FAIpQLScm2fmPXpqeFDf2wUMZNkTLakZ_nI6sJWwstHSS7l3fu_inLw/viewform?entry.34625858=&entry.1752528148=' + title + '&entry.301156700=' + 
+						vm.formURL ='https://docs.google.com/forms/d/e/1FAIpQLScm2fmPXpqeFDf2wUMZNkTLakZ_nI6sJWwstHSS7l3fu_inLw/viewform?entry.34625858=&entry.1752528148=' + title + '&entry.301156700=' +
 						'&entry.97733718=' + author + '&entry.165289220=' + pub_year + '&entry.1078294971=&entry.2086517750=' + material_type + '&entry.1347329161=' + loc + '&entry.2093632974=' + shelfmark +  '&entry.435363005=' + userID + '&entry.1924359520=' + rec_id;
-					
+
 					} else {
 						vm.buttonText = 'PLEASE LOG IN TO REQUEST';
 						vm.formURL = '';
 						vm.serviceText = '';
 					}
-					
+
 				//determine whether book takeaway link should appear based on delcategory/library code
 				vm.ShowReqLink = Boolean(delcat == false);
 				vm.Requestable = Boolean(rqst == '-1');
 			}
 		}});
-		
-		
-		console.log('************************End Book Takeaway*************************');
-		
 
-		
+
+		console.log('************************End Book Takeaway*************************');
+
+
+
 		/*******************end remove block ********************/
-		
-		
+
+
 		/*borthwick finding aid custom display*/
-		
-	
+
+
 
 
 		/*change default no results page*/
@@ -286,7 +289,7 @@
 		/*- ### --- Primo Footer JS ---- Code Originally from NLNZ --- ### */
 		app.component('prmExploreFooterAfter', {
 			bindings: { parentCtrl: '<' },
-			template: '<div id="footerWrapper"><ul><li><div class="ftext"><span class="headline">University Library</span><p>&nbsp;</p><p>University of York, Heslington, York, YO10 5DD, UK</p><p>Tel: +44 (0)1904 323838</p><p>&nbsp;</p></div></li><li><div class="ftext"><span class="headline">Library Links</span><p>&nbsp;</p><p><a href="mailto:lib-enquiry@york.ac.uk" class="footer_link">Contact Us</a><p><a href="https://informationbookings.york.ac.uk/r">Book a Study Room</a></p></div></li></ul><div class="line-2-copy-left"></div><div class="line-2-copy-right"></div><div class="bar"><div class="bar-wrap"><ul class="links"><li><a href="https://www.york.ac.uk/library" class="md-primoExplore-theme">Library Homepage</a>&nbsp;&nbsp;&nbsp;| </li><li><a href="https://www.york.ac.uk/about/legal-statements/" class="md-primoExplore-theme">Legal Statements</a>&nbsp;&nbsp;&nbsp;| </li><li><a href="https://www.york.ac.uk/about/legal-statements/#tab-5" class="md-primoExplore-theme">Privacy</a></li></ul><div class="logos"><span></span></a><a href="https://www.york.ac.uk/" target="_blank" class="all-govt md-primoExplore-theme"><span><img title="" src="custom/44YORK-NUI/img/uoy-logo.png" width="210" alt="University of York logo"></span></a></div><div class="clear"></div><div class="copyright"></div></div></div></div>'
+			template: '<div id="footerWrapper"><ul><li><div class="ftext"><span class="headline">University Library</span><p>&nbsp;</p><p>University of York, Heslington, York, YO10 5DD, UK</p><p>Tel: +44 (0)1904 323838</p><p>&nbsp;</p></div></li><li><div class="ftext"><span class="headline">Library Links</span><p>&nbsp;</p><p><a href="mailto:lib-enquiry@york.ac.uk" class="footer_link">Contact Us</a><p><a href="https://informationbookings.york.ac.uk/r">Book a Study Room</a></p></div></li></ul><div class="line-2-copy-left"></div><div class="line-2-copy-right"></div><div class="bar"><div class="bar-wrap"><ul class="links"><li><a href="https://www.york.ac.uk/library" class="md-primoExplore-theme">Library Homepage</a>&nbsp;&nbsp;&nbsp;| </li><li><a href="https://www.york.ac.uk/about/legal-statements/" class="md-primoExplore-theme">Legal Statements</a>&nbsp;&nbsp;&nbsp;| </li><li><a href="https://www.york.ac.uk/about/legal-statements/#tab-5" class="md-primoExplore-theme">Privacy</a>&nbsp;&nbsp;&nbsp;|</li><li><a href="https://subjectguides.york.ac.uk/accessibility-statements/yorsearch" alt="Link to accessibility statement" class="md-primoExplore-theme">Accessibility Statement</a></li></ul><div class="logos"><span></span></a><a href="https://www.york.ac.uk/" target="_blank" class="all-govt md-primoExplore-theme"><span><img title="" src="custom/44YORK-NUI/img/uoy-logo.png" width="210" alt="University of York logo"></span></a></div><div class="clear"></div><div class="copyright"></div></div></div></div>'
 
 		});
 
@@ -399,13 +402,13 @@
 			defaultTitle: 'YorSearch'
 		});
 	})();
-	 	
-	
+
+
 	window.addEventListener('load', (event) => {
 	  console.log('page is fully loaded');
 	  //locate preFilter dropdowns
 	  var ddown = document.querySelector(".pre-filters-container");
-	  
+
 	});
 
 	/*- ########## ---------- Non AngularJS code ---------- ########## */
@@ -435,6 +438,3 @@
 			document.querySelectorAll('.primo-scrollbar, .is-stuck')[0].style.maxHeight = 'calc(100% - 2em)';
 		}
 	});
-	
-
-	
